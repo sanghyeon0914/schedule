@@ -16,6 +16,7 @@ public class ScheduleController {
     private final Map<Long, Schedule> scheduleList = new HashMap<>();
 
 
+    //생성 기능
     @PostMapping
     public ResponseEntity<ScheduleResponseDto> createSchedule(@RequestBody ScheduleRequestDto requestDto) {
 
@@ -31,6 +32,19 @@ public class ScheduleController {
         return new ResponseEntity<>(new ScheduleResponseDto(schedule), HttpStatus.CREATED);
     }
 
+    //조회 기능
+    @GetMapping("/{id}")
+    public ResponseEntity<ScheduleResponseDto> finsScheduleId(@PathVariable Long id) {
+
+        Schedule schedule = scheduleList.get(id);
+
+        if(schedule == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(new ScheduleResponseDto(schedule), HttpStatus.OK);
+    }
+
+    //전체 조회 기능
     @GetMapping
     public List<ScheduleResponseDto> findAllSchedules(){
 
@@ -49,17 +63,7 @@ public class ScheduleController {
         return responseList;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ScheduleResponseDto> finsScheduleId(@PathVariable Long id) {
-
-        Schedule schedule = scheduleList.get(id);
-
-        if(schedule == null){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(new ScheduleResponseDto(schedule), HttpStatus.OK);
-    }
-
+    /*// 전체 수정 기능 구현 할 필요 x
     @PutMapping("/{id}")
     public ResponseEntity<ScheduleResponseDto> updateScheduleById(
             @PathVariable long id,
@@ -80,8 +84,9 @@ public class ScheduleController {
 
        return new ResponseEntity<>(new ScheduleResponseDto(schedule), HttpStatus.OK);
 
-    }
+    }*/
 
+    //일부 수정 기능
     @PatchMapping("/{id}")
     public ResponseEntity<ScheduleResponseDto> updateTitle(
             @PathVariable long id,
@@ -94,23 +99,39 @@ public class ScheduleController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        if(dto.getTitle() == null || dto.getName() != null || dto.getPwd() != null){
+        if(dto.getTitle() == null || dto.getName() == null /*|| dto.getPwd() == null*/){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        schedule.updateTitle(dto);
+        // 비밀번호가 일치하지 않으면 FORBIDDEN
+        if (!schedule.getPwd().equals(dto.getPwd())) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
+        schedule.updateSchedule(dto);
 
         return new ResponseEntity<>(new ScheduleResponseDto(schedule), HttpStatus.OK);
     }
 
+    //삭제 기능
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteSchedule(@PathVariable long id){
+    public ResponseEntity<Void> deleteSchedule(
+            @PathVariable long id,
+            @RequestBody ScheduleRequestDto dto)
+    {
+
+        Schedule schedule = scheduleList.get(id);
 
         // scheduleLis의 Key값에 id를 포함하고 있다면
         if(scheduleList.containsKey(id)){
             scheduleList.remove(id);
 
             return new ResponseEntity<>(HttpStatus.OK);
+        }
+
+        // 비밀번호가 일치하지 않으면 FORBIDDEN
+        if (!schedule.getPwd().equals(dto.getPwd())) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);

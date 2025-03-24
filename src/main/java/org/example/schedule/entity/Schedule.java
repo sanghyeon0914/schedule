@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.example.schedule.dto.ScheduleRequestDto;
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -13,12 +11,13 @@ import java.time.LocalDateTime;
 public class Schedule {
 
     private Long id;
-    private String title;
-    private String name;
-    private Integer pwd;
 
-    private LocalDateTime createdAt;
-    private LocalDateTime modifiedAt;
+    private String title; // 할일
+    private String name; // 작성자
+    private Integer pwd; // 비밀 번호
+
+    private LocalDateTime createdAt; //작성일
+    private LocalDateTime modifiedAt; //수정일
 
 
     public Schedule(Long id, ScheduleRequestDto dto) {
@@ -47,8 +46,9 @@ public class Schedule {
         this.modifiedAt = LocalDateTime.now();
     }
 
-    public void updateTitle(ScheduleRequestDto dto) {
+    public void updateSchedule(ScheduleRequestDto dto) {
         this.title = dto.getTitle();
+        this.name = dto.getName();
         this.modifiedAt = LocalDateTime.now();
     }
 }
