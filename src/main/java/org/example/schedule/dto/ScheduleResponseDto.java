@@ -1,13 +1,13 @@
 package org.example.schedule.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.example.schedule.entity.Schedule;
 
 import java.time.LocalDateTime;
 
 @Getter
-@NoArgsConstructor
+@AllArgsConstructor
 public class ScheduleResponseDto {
 
     private Long id;
@@ -25,4 +25,5 @@ public class ScheduleResponseDto {
         this.createdAt = schedule.getCreatedAt();
         this.modifiedAt = schedule.getModifiedAt();
     }
+
 }
