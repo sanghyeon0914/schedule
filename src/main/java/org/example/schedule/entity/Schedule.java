@@ -1,11 +1,9 @@
 package org.example.schedule.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.example.schedule.dto.ScheduleRequestDto;
-
-import java.time.LocalDate;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -16,39 +14,25 @@ public class Schedule {
     private String title;
     private String name;
     private Integer pwd;
-
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
-
-    public Schedule(Long id, ScheduleRequestDto dto) {
-        this.id = id;
-        this.title = dto.getTitle();
-        this.name = dto.getName();
-        this.pwd = dto.getPwd();
-        this.createdAt = LocalDateTime.now(); //현재 시간이 모두 저장된다 (시, 분, 초) 주의하기
-        this.modifiedAt = this.createdAt; // 최초에는 동일
+    public Schedule(String title, String name, Integer pwd) {
+        this.title = title;
+        this.name = name;
+        this.pwd = pwd;
+        this.createdAt = LocalDateTime.now();
+        this.modifiedAt = this.createdAt;
     }
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @CreatedDate
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @LastModifiedDate
     public LocalDateTime getModifiedAt() {
         return modifiedAt;
     }
 
-    public void update(ScheduleRequestDto dto) {
-        this.title = dto.getTitle();
-        this.name = dto.getName();
-        this.pwd = dto.getPwd();
-        this.modifiedAt = LocalDateTime.now();
-    }
-
-    public void updateTitle(ScheduleRequestDto dto) {
-        this.title = dto.getTitle();
-        this.modifiedAt = LocalDateTime.now();
-    }
 }
