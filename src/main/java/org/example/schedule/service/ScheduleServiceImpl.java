@@ -44,14 +44,6 @@ public class ScheduleServiceImpl implements ScheduleService{
             Schedule schedule = scheduleRepository.findScheduleById(id);
 
             return new ScheduleResponseDto(schedule);
-
-            /*Optional<Schedule> optiponalSchedule = ScheduleRepository.findScheduleById(id);
-
-            if (optiponalSchedule.isEmpty()) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id);
-            }
-
-            return new ScheduleResponseDto(optiponalSchedule.get());*/
         }
 }
 
