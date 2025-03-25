@@ -16,4 +16,10 @@ public interface ScheduleService{
 
     ScheduleResponseDto findScheduleById(Long id);
 
+    @Transactional
+    ScheduleResponseDto updateSchedule(Long id, String title, String name, Integer pwd, LocalDateTime modifiedAt);
+
+    void deleteSchedule(long id, Integer pwd);
+
+
 }

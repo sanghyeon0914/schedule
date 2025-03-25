@@ -11,7 +11,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ScheduleServiceImpl implements ScheduleService{
@@ -45,5 +44,58 @@ public class ScheduleServiceImpl implements ScheduleService{
 
             return new ScheduleResponseDto(schedule);
         }
+
+        @Transactional
+        @Override
+        public ScheduleResponseDto updateSchedule(Long id, String title, String name, Integer pwd, LocalDateTime modifiedAt) {
+
+            if (id == null) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ID must not be null");
+            }
+
+            Schedule schedule = scheduleRepository.findScheduleById(id);
+
+            if (schedule == null) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Schedule not found with id = " + id);
+            }
+
+            /*// 필수값 검증
+            if (title == null || name == null || pwd == null) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The title and content are required values.");
+            }*/
+
+            if(!schedule.getPwd().equals(pwd)){
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "pwd is wrong");
+            }
+
+            int updatedRaw = scheduleRepository.updateSchedule(id, title, name, pwd, modifiedAt);
+
+            if (updatedRaw == 0) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No data has been modified.");
+            }
+
+            return new ScheduleResponseDto(scheduleRepository.findScheduleById(id));
+        }
+
+        @Override
+        public void deleteSchedule(long id, Integer pwd){
+
+            Schedule schedule = scheduleRepository.findScheduleById(id);
+            if (schedule == null) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Schedule not found with id = " + id);
+            }
+
+            if(!schedule.getPwd().equals(pwd)){
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "pwd is wrong");
+            }
+
+            int deleteRow = scheduleRepository.deleteSchedule(id, pwd);
+
+            if(deleteRow == 0){
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id);
+            }
+        }
+
+
 }
 
