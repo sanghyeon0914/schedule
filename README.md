@@ -44,10 +44,10 @@ API<br>
 
 
 ERD<br>
-![image.png](attachment:036414b9-82e2-4d25-b38a-79775971c38a:image.png)<br>
+![image](https://github.com/user-attachments/assets/3552dfa6-a90b-455a-82ea-f9acfe62c74c)
 
-![image.png](attachment:f6291ef9-038e-4480-96e6-e45ebabbbcb0:image.png)<br>
 
 sql<br>
-![image.png](attachment:90a6e1ad-005c-4f59-8494-7572c5613428:image.png)<br>
+
+![image](https://github.com/user-attachments/assets/bb7b0ea3-f774-4814-8dfc-56b97eafd0b1)
 
