@@ -59,11 +59,6 @@ public class ScheduleServiceImpl implements ScheduleService{
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Schedule not found with id = " + id);
             }
 
-            /*// 필수값 검증
-            if (title == null || name == null || pwd == null) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The title and content are required values.");
-            }*/
-
             if(!schedule.getPwd().equals(pwd)){
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "pwd is wrong");
             }

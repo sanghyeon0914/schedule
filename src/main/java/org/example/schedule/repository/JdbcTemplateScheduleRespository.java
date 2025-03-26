@@ -39,7 +39,6 @@ public class JdbcTemplateScheduleRespository implements ScheduleRepository{
         parameters.put("createdAt", schedule.getCreatedAt());
         parameters.put("modifiedAt", schedule.getModifiedAt());
 
-        // 저장 후 생성된 key값을 Number 타입으로 반환하는 메서드
         Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
 
         return new ScheduleResponseDto(key.longValue(), schedule.getTitle(), schedule.getName(), schedule.getPwd(), schedule.getCreatedAt(), schedule.getModifiedAt());
