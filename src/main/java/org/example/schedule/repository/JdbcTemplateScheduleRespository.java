@@ -13,6 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,7 +46,7 @@ public class JdbcTemplateScheduleRespository implements ScheduleRepository{
 
     @Override
     public List<ScheduleResponseDto> findAllSchedules() {
-        return jdbcTemplate.query("select * from schedule", scheduleRowMapper());
+        return jdbcTemplate.query("select * from schedule order by modifiedAt DESC;", scheduleRowMapper());
     }
 
     @Override
@@ -54,6 +55,17 @@ public class JdbcTemplateScheduleRespository implements ScheduleRepository{
         return result.stream().findAny().orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id));
     }
 
+    @Override
+    public int updateSchedule(Long id, String title, String name, Integer pwd, LocalDateTime modifiedAt) {
+        return jdbcTemplate.update("update schedule set title = ?, name = ?, modifiedAt = ? where id = ?", title, name, modifiedAt, id);
+    }
+
+    @Override
+    public int deleteSchedule(Long id, Integer pwd){
+        return jdbcTemplate.update("delete from schedule where id = ?", id);
+    }
+
+    //table에서 dto로 넘겨주는 역활
     private RowMapper<ScheduleResponseDto> scheduleRowMapper(){
 
         return new RowMapper<ScheduleResponseDto>() {
